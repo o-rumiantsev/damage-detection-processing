@@ -19,6 +19,11 @@ shapely = "^2.0.2"
 segmentation-models = "^1.0.1"
 scikit-image = "^0.22.0"
 rasterio = "^1.3.9"
+fastapi = "^0.104.1"
+uvicorn = {extras = ["standard"], version = "^0.24.0.post1"}
+python-multipart = "^0.0.6"
+aiofiles = "^23.2.1"
+asyncio = "^3.4.3"
 
 [build-system]
 requires = ["poetry-core"]
