@@ -16,4 +16,4 @@ async def create(file_id):
         for polygon in geospatial_polygons:
             polygons.append({"damage_class": damage_class, "polygon": polygon})
 
-    await polygons_storage.save(polygons)
+    await polygons_storage.save_many(polygons)
