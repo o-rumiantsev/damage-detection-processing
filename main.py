@@ -1,13 +1,9 @@
-# from src.geospatial_mapping import get_geospatial_metadata, polygons_to_geospatial
-# from src.analysis.process_image import process_image
-# from src.storage import store_polygons
-# from src.data_loader import load_image
-
 from fastapi import FastAPI, UploadFile
 from pydantic import BaseModel
 
 from src.api import files as files_service
 from src.api import analyzing_jobs as analyzing_jobs_service
+from src.api import polygons as polygons_service
 
 app = FastAPI()
 
@@ -25,4 +21,10 @@ async def create_files(files: list[UploadFile]):
 @app.post('/analyzing-jobs')
 async def create_analyzing_job(dto: CreateAnalyzingJobModel):
     data = await analyzing_jobs_service.create(dto.file_id)
+    return {"data": data}
+
+
+@app.get('/polygons')
+async def get_polygons():
+    data = await polygons_service.get_many()
     return {"data": data}

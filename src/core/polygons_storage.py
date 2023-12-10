@@ -3,7 +3,7 @@ from datetime import datetime
 from geoalchemy2 import Geometry
 from geoalchemy2.shape import from_shape
 from shapely.geometry import Polygon as ShapelyPolygon
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, select
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -37,3 +37,9 @@ async def save_many(polygons):
             ))
 
         await session.commit()
+
+
+async def get_many():
+    async with AsyncSessionLocal() as session:
+        result = await session.execute(select(Polygon))
+        return result.scalars().all()
