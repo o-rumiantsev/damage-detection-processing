@@ -1,11 +1,20 @@
 from fastapi import FastAPI, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from src.api import files as files_service
 from src.api import analyzing_jobs as analyzing_jobs_service
+from src.api import files as files_service
 from src.api import polygons as polygons_service
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 class CreateAnalyzingJobModel(BaseModel):

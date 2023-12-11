@@ -21,6 +21,7 @@ services:
       - "8000:8000"
     volumes:
       - ./file-storage:/usr/src/app/file-storage
+      - ./models:/usr/src/app/models
 
 volumes:
   pgdata:
