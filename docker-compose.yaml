@@ -1,17 +1,26 @@
 version: '3.8'
 
 services:
-  postgres:
+  database:
     image: postgis/postgis:latest
     container_name: postgis_container
     environment:
       POSTGRES_DB: damage-detection
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-    ports:
-      - "35432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+
+  core:
+    build:
+      context: .
+    container_name: damage_detection_core
+    environment:
+      DATABASE_URL: postgresql+asyncpg://postgres:postgres@database:5432/damage-detection
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./file-storage:/usr/src/app/file-storage
 
 volumes:
   pgdata:
