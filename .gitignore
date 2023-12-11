@@ -2,3 +2,5 @@
 /test-data
 /api-data
 /models
+
+.env
