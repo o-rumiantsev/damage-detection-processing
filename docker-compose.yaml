@@ -1,19 +1,8 @@
 version: '3.8'
 
 services:
-  database:
-    image: postgis/postgis:latest
-    container_name: postgis_container
-    environment:
-      POSTGRES_DB: damage-detection
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-
   core:
-    build:
-      context: .
+    build: .
     container_name: damage_detection_core
     environment:
       DATABASE_URL: postgresql+asyncpg://postgres:postgres@database:5432/damage-detection
@@ -22,6 +11,35 @@ services:
     volumes:
       - ./file-storage:/usr/src/app/file-storage
       - ./models:/usr/src/app/models
+    depends_on:
+      database:
+        condition: service_started
+      queue:
+        condition: service_started
+
+  database:
+    image: postgis/postgis:latest
+    container_name: postgis_container
+    environment:
+      POSTGRES_DB: damage-detection
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "35432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  queue:
+    image: "rabbitmq:3-management"
+    container_name: damage_detection_queue
+    hostname: "rabbitmq"
+    environment:
+      RABBITMQ_DEFAULT_USER: "user"
+      RABBITMQ_DEFAULT_PASS: "password"
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - "35672:5672"
+      - "15672:15672"
 
 volumes:
   pgdata:

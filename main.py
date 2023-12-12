@@ -18,7 +18,7 @@ app.add_middleware(
 
 
 class CreateAnalyzingJobModel(BaseModel):
-    file_id: str
+    file_ids: list[str]
 
 
 @app.post("/files", status_code=201)
@@ -29,7 +29,7 @@ async def create_files(files: list[UploadFile]):
 
 @app.post('/analyzing-jobs', status_code=201)
 async def create_analyzing_job(dto: CreateAnalyzingJobModel):
-    await analyzing_jobs_service.create(dto.file_id)
+    await analyzing_jobs_service.create(dto.file_ids)
     return {"status": "created"}
 
 

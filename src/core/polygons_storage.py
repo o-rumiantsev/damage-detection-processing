@@ -8,9 +8,10 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
+from src import logger
 from src.config import DATABASE_URL, SRID
 
-engine = create_async_engine(DATABASE_URL, echo=True)
+engine = create_async_engine(DATABASE_URL)
 
 Base = declarative_base()
 
@@ -29,6 +30,7 @@ AsyncSessionLocal = sessionmaker(engine, class_=AsyncSession, expire_on_commit=F
 
 async def save_many(polygons):
     async with AsyncSessionLocal() as session:
+        logger.info(f'Saving {len(polygons)} polygons')
         for polygon in polygons:
             shapely_polygon = ShapelyPolygon(polygon['polygon'])
             session.add(Polygon(
@@ -37,6 +39,7 @@ async def save_many(polygons):
             ))
 
         await session.commit()
+        logger.info(f'Saved {len(polygons)} polygons')
 
 
 async def get_many():
