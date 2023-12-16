@@ -42,4 +42,4 @@ def slice_geotiff(input_filename, output_filename_base, tile_size=1024):
 
 
 # Example usage
-slice_geotiff('test-data/livoberezhnyi-raion.tiff', 'test-data/output_tile')
+slice_geotiff('satellite_images/mariupol_center.tiff', 'satellite_images/mariupol_center_part')

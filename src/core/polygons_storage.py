@@ -1,35 +1,14 @@
-from datetime import datetime
-
-from geoalchemy2 import Geometry
 from geoalchemy2.shape import from_shape
 from shapely.geometry import Polygon as ShapelyPolygon
-from sqlalchemy import Column, Integer, String, DateTime, select
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
 
 from src import logger
-from src.config import DATABASE_URL, SRID
-
-engine = create_async_engine(DATABASE_URL)
-
-Base = declarative_base()
+from src.config import SRID
+from src.database.models import Polygon
+from src.database.sql import create_session
 
 
-class Polygon(Base):
-    __tablename__ = 'polygons'
-    id = Column(Integer, primary_key=True)
-    damage_class = Column(String)
-    polygon = Column(Geometry('POLYGON', srid=4326))
-    created_at = Column(DateTime, default=datetime.utcnow)
-
-
-# Create a configured "AsyncSession" class
-AsyncSessionLocal = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-
-
-async def save_many(polygons):
-    async with AsyncSessionLocal() as session:
+def save_many(polygons):
+    with create_session() as session:
         logger.info(f'Saving {len(polygons)} polygons')
         for polygon in polygons:
             shapely_polygon = ShapelyPolygon(polygon['polygon'])
@@ -38,11 +17,10 @@ async def save_many(polygons):
                 polygon=from_shape(shapely_polygon, srid=SRID)
             ))
 
-        await session.commit()
+        session.commit()
         logger.info(f'Saved {len(polygons)} polygons')
 
 
-async def get_many():
-    async with AsyncSessionLocal() as session:
-        result = await session.execute(select(Polygon))
-        return result.scalars().all()
+def get_many():
+    with create_session() as session:
+        return session.query(Polygon).all()

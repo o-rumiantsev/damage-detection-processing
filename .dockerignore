@@ -2,3 +2,5 @@
 /file-storage
 /venv
 /test-data
+
+.env

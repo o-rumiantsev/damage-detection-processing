@@ -23,4 +23,4 @@ async def analyze_file(file_id):
 
     logger.info(f'Finished geospatial mapping for file "{file_id}"')
 
-    await polygons_storage.save_many(polygons)
+    polygons_storage.save_many(polygons)

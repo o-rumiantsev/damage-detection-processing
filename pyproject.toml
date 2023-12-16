@@ -30,6 +30,7 @@ geoalchemy2 = "^0.14.2"
 asyncpg = "^0.29.0"
 python-dotenv = "^1.0.0"
 aio-pika = "^9.3.1"
+alembic = "^1.13.0"
 
 [build-system]
 requires = ["poetry-core"]

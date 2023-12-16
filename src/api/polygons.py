@@ -4,7 +4,7 @@ from src.core import polygons_storage
 
 
 async def get_many():
-    polygons = await polygons_storage.get_many()
+    polygons = polygons_storage.get_many()
     return [to_dto(polygon) for polygon in polygons]
 
 

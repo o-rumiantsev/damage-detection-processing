@@ -3,10 +3,11 @@ import asyncio
 from aio_pika import connect, IncomingMessage, ExchangeType, Message
 
 from src import logger
+from src.config import QUEUE_URL
 
 
 async def get_connection():
-    connection = await connect("amqp://user:password@localhost:35672")
+    connection = await connect(QUEUE_URL)
     channel = await connection.channel(publisher_confirms=False)
     exchange = await channel.declare_exchange('test_exchange', ExchangeType.DIRECT)
     queue = await channel.declare_queue('test_queue', durable=True)

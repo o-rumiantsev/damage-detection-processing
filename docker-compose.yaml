@@ -2,12 +2,30 @@ version: '3.8'
 
 services:
   core:
-    build: .
+    image: damage-detection-processing-core
     container_name: damage_detection_core
+    command: "uvicorn main:app --host 0.0.0.0 --port 8000"
     environment:
-      DATABASE_URL: postgresql+asyncpg://postgres:postgres@database:5432/damage-detection
+      DATABASE_URL: postgresql://postgres:postgres@database:5432/damage-detection
+      QUEUE_URL: amqp://user:password@queue:5672
     ports:
       - "8000:8000"
+    volumes:
+      - ./file-storage:/usr/src/app/file-storage
+      - ./models:/usr/src/app/models
+    depends_on:
+      database:
+        condition: service_started
+      queue:
+        condition: service_started
+
+  worker:
+    image: damage-detection-processing-core
+    container_name: damage_detection_worker
+    command: "python analyze_worker.py"
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@database:5432/damage-detection
+      QUEUE_URL: amqp://user:password@queue:5672
     volumes:
       - ./file-storage:/usr/src/app/file-storage
       - ./models:/usr/src/app/models

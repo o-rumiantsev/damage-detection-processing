@@ -6,6 +6,8 @@ load_dotenv()
 
 DATABASE_URL = os.environ.get('DATABASE_URL')
 
+QUEUE_URL = os.environ.get('QUEUE_URL')
+
 MODEL = 'models/damage-detector-2023-12-04T13_41_55.h5'
 
 FILE_READ_SIZE = 1024
