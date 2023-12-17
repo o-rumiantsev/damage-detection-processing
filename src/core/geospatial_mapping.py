@@ -1,15 +1,7 @@
-import os.path
-
 import rasterio
 from rasterio import warp
 
-from src.config import COORDINATE_REFERENCE_SYSTEM, FILE_STORAGE_PATH
-
-
-def get_metadata(file_id):
-    file_path = os.path.join(FILE_STORAGE_PATH, file_id)
-    with rasterio.open(file_path) as dataset:
-        return dataset.crs, dataset.transform
+from src.config import COORDINATE_REFERENCE_SYSTEM
 
 
 def to_geospatial(polygons, metadata):

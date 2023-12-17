@@ -2,9 +2,7 @@ from fastapi import FastAPI, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from src.api import analyzing_jobs as analyzing_jobs_service
-from src.api import files as files_service
-from src.api import polygons as polygons_service
+from src.api import analyzing_jobs_service, files_service, polygons_service
 
 app = FastAPI()
 

@@ -4,7 +4,7 @@ import uuid
 from fastapi import File, UploadFile
 
 from src import logger
-from src.core import files_storage
+from src.core import files as files_core
 
 
 async def create_many(files: list[UploadFile]):
@@ -25,8 +25,8 @@ async def create_many(files: list[UploadFile]):
 async def create(file: File):
     file_id = str(uuid.uuid4())
 
-    await files_storage.save(file_id, file)
+    await files_core.save(file_id, file)
 
     logger.info(f'Successfully saved file "{file.filename}" as "{file_id}"')
 
-    return {"file_name": file.filename, "file_id": file_id}
+    return file_id

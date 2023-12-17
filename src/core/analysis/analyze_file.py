@@ -1,11 +1,10 @@
 from src import logger
-from src.core import files_storage, geospatial_mapping, polygons_storage
+from src.core import files, geospatial_mapping, polygons_storage
 from src.core.analysis.process_image import process_image
 
 
 async def analyze_file(file_id):
-    image = files_storage.get(file_id)
-    geospatial_metadata = geospatial_mapping.get_metadata(file_id)
+    image, geospatial_metadata = await files.get(file_id)
 
     logger.info(f'Start processing file "{file_id}"')
 
