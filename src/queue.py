@@ -42,13 +42,14 @@ async def process_messages(handler):
     connection, channel = await get_connection()
     queue = await channel.get_queue('test_queue')
 
-    async def on_message(message: IncomingMessage):
-        async with message.process():
-            body = message.body.decode()
-            logger.info(f' [queue] Received message "{body}"')
-            await handler(body)
-            logger.info(f' [queue] Handled message "{body}"')
+    logger.info('Start handling queue')
 
-    await queue.consume(on_message)
+    async with queue.iterator() as queue_iterator:
+        async for message in queue_iterator:
+            async with message.process():
+                body = message.body.decode()
+                logger.info(f' [queue] Received message "{body}"')
+                await handler(body)
+                logger.info(f' [queue] Handled message "{body}"')
 
-    await asyncio.Future()
+    logger.info('Finish handling queue')
