@@ -39,4 +39,4 @@ def get_tiles(ds, width=1024, height=1024):
 
 
 # Example usage
-slice_geotiff('satellite_images/mariupol_center.tiff', 'satellite_images/mariupol_center_part')
+slice_geotiff('satellite_images/rubizhne_large.tiff', 'satellite_images/rubizhne_large')

@@ -7,7 +7,7 @@ load_dotenv()
 DATABASE_URL = os.environ.get('DATABASE_URL')
 QUEUE_URL = os.environ.get('QUEUE_URL')
 
-MODEL = 'models/damage-detector-2023-12-17T09_01_21.h5'
+MODEL = 'models/fine-tune-2023-12-18T09_54_17.h5'
 
 SRID = 4326
 
